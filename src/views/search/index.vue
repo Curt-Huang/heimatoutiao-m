@@ -1,6 +1,6 @@
 <template>
-  <div>
-      搜索中心组件
+  <div class="container">
+    <van-nav-bar left-arrow @click-left="$router.back()" title="搜索中心"></van-nav-bar>
   </div>
 </template>
 
