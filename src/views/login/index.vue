@@ -10,12 +10,15 @@
       </van-field>
     </van-cell-group>
     <div class='btn-box'>
-      <van-button type="info" size="small" round block>登录</van-button>
+      <van-button type="info" size="small" round block @click="clickLogin">登录</van-button>
     </div>
   </div>
 </template>
-
 <script>
+// 引入封装api
+import { login } from '@/api/user'
+// 引入vuex的辅助函数
+import { mapMutations } from 'vuex'
 export default {
   name: 'login',
   data () {
@@ -31,6 +34,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['updateUser']),
     // 检查输入的手机格式
     checkMobile () {
       if (!this.loginForm.mobile) {
@@ -60,10 +64,19 @@ export default {
       return true
     },
     // 登录方法
-    login () {
+    async clickLogin () {
       // 如果表单验证都通过，就可以向后台发送登录请求了
       if (this.checkMobile && this.checkCode) {
-
+        let data = await login(this.loginForm)
+        // console.log(data)
+        // 将数据保存在本地
+        this.updateUser({ user: data })
+        // 提示用户登录成功 这是调用vant组件 老师讲的通过propotype小技巧暂未使用
+        this.$notify({ type: 'success', message: '登录成功', duration: 500 })
+        // 获取浏览器窗口中的redirectUrl，从而让其跳回原来的登录界面
+        let { redirectUrl } = this.$route.query
+        // 采用短路表达式，当有redirectUrl的时候，就用它，没有的时候就用短路表达式，调到首页
+        this.$router.push(redirectUrl || '/')
       }
     }
   }

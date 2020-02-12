@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 // 导入auth中的全部方法 通过auth。的方式可以按需选用
-import * as auth from '../utils/auth'
+import * as auth from '@/utils/auth'
 
 Vue.use(Vuex)
 
