@@ -11,7 +11,7 @@ const instance = axios.create({
     // data就是后台相应的数据 我们可以通过tansformResponse来对后台相应的data数据进行任意转换
     // return data ? JSONBig.parse(data) : {}
     try {
-      return JSONBig.parse(data)
+      return JSONBig.parse(data) // 将大数字转成对象形式
     } catch (error) {
       return data
     }

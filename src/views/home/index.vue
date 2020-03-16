@@ -4,36 +4,56 @@
     <van-tabs v-model="activeIndex" swipeable>
       <van-tab :title="item.name" v-for="item in channels" :key="item.id">
       <!-- article组件 -->
-       <article-list :channel_id='item.id'></article-list>
+       <article-list @showAction='openAction' :channel_id='item.id'></article-list>
       </van-tab>
     </van-tabs>
     <!-- 右边三道杠 -->
     <span class="bar_btn">
       <van-icon name="wap-nav" />
     </span>
+    <!-- 报告组件 -->
+    <van-popup :style="{width:'80%'}" v-model="isShow">
+      <more-action @clickId="clickId"></more-action>
+    </van-popup>
   </div>
 </template>
 
 <script>
-import ArticleList from '@/components/article-list.vue'
-import { getMyChannels } from '@/api/channels'
+import ArticleList from './components/article-list.vue' // 文章列表组件
+import MoreAction from './components/more-action.vue' // 报告组件
+import { getMyChannels } from '@/api/channels' //  频道
+// import { disLickArticle } from '@/api/article.js'
 export default {
   name: 'home', // devtools查看组件时 可以看到对应的name名称
   components: {
-    ArticleList
+    ArticleList,
+    MoreAction
+
   },
   data () {
     return {
       activeIndex: 2, // 默认标签栏 显示的栏数 索引是从0开始的
       channels: [], // 需要的频道数据
-      timestamp: null // 当前时间戳
+      isShow: false, // 弹层显示
+      articleId: ''// 传进来的文章Id
     }
   },
   methods: {
     async getMyChannels () {
       let data = await getMyChannels()
-      // console.log(b)
+      console.log(data)
       this.channels = data.channels
+    },
+    // 点击叉号后，显示出举报弹出层
+    openAction (artId) {
+      this.isShow = true
+      this.articleId = artId
+      // console.log('弹出')
+    },
+    // 点击不感兴趣触发
+    async clickId () {
+      this.$notify({ type: 'success', message: '删除成功' })
+      this.isShow = false
     }
   },
   created () {
