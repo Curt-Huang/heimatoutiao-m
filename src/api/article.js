@@ -9,7 +9,7 @@ export function getArticles (params) {
 }
 
 // 不喜欢文章 删除
-export function disLikeArticles (data) {
+export function disLikeArticle (data) {
   return request({
     url: '/article/dislikes',
     method: 'post',

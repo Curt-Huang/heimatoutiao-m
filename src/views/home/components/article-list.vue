@@ -34,6 +34,7 @@
 <script>
 import { getArticles } from '@/api/article.js'
 import { mapState } from 'vuex'
+import eventBus from '@/utils/eventBus.js'
 export default {
   name: 'article-list',
   data () {
@@ -109,6 +110,18 @@ export default {
         this.refreshSuccessText = '暂无数据'
       }
     }
+  },
+  created () {
+    eventBus.$on('delArticle', (articleId, channelId) => {
+      if (this.channel_id === channelId) {
+        // 代表该列表就是当前激活的列表，因为列表是map遍历循环生成的，所以只有遍历到与传进来的列表id相同时，才会进入到循环中
+        let index = this.articles.findIndex(item => item.art_id.toString() === articleId)
+        // 通过比对art_id来对article中的数据进行筛选，当与传入的id一致时，把此时的索引导出
+        if (index > -1) {
+          this.articles.splice(index, 1)// 根据不喜欢文章的索引，在article中，直接将它删除
+        }
+      }
+    })
   }
 }
 </script>

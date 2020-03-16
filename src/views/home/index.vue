@@ -22,7 +22,8 @@
 import ArticleList from './components/article-list.vue' // 文章列表组件
 import MoreAction from './components/more-action.vue' // 报告组件
 import { getMyChannels } from '@/api/channels' //  频道
-// import { disLickArticle } from '@/api/article.js'
+import { disLikeArticle } from '@/api/article.js'
+import eventBus from '@/utils/eventBus.js'
 export default {
   name: 'home', // devtools查看组件时 可以看到对应的name名称
   components: {
@@ -52,8 +53,18 @@ export default {
     },
     // 点击不感兴趣触发
     async clickId () {
-      this.$notify({ type: 'success', message: '删除成功' })
-      this.isShow = false
+      try {
+        if (this.articleId) {
+          await disLikeArticle({
+            target: this.articleId
+          })
+          eventBus.$emit('delArticle', this.articleId, this.channels[this.activeIndex].id)
+          this.$notify({ type: 'success', message: '删除成功' })
+          this.isShow = false
+        }
+      } catch (error) {
+        this.$notify({ type: 'warning', message: '删除失败' })
+      }
     }
   },
   created () {
