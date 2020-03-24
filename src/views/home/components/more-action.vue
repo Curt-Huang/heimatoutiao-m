@@ -7,23 +7,23 @@
       </van-cell-group>
       <van-cell-group v-else >
           <van-cell @click='isReport=false'>返回</van-cell>
-          <van-cell>侵权</van-cell>
-          <van-cell>色情</van-cell>
-          <van-cell>暴力</van-cell>
-          <van-cell>低俗</van-cell>
-          <van-cell>不适</van-cell>
-          <van-cell>错误</van-cell>
-          <van-cell>其他</van-cell>
+          <van-cell @click="$emit('reportConstant',item.value)" v-for="item in constant" :key="item.value">{{item.label}}</van-cell>
       </van-cell-group>
   </div>
 </template>
 
 <script>
+import eventBus from '@/utils/eventBus'
+import { constant } from '@/api/constant.js'
 export default {
   data () {
     return {
-      isReport: false
+      isReport: false,
+      constant // 传递进来的举报常量
     }
+  },
+  created () {
+    eventBus.$on('delArticle', () => { this.isReport = false })
   }
 }
 </script>

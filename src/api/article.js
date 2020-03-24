@@ -16,3 +16,11 @@ export function disLikeArticle (data) {
     data
   })
 }
+// 举报文章的API
+export function reportArticle (data) {
+  return request({
+    url: '/article/reports',
+    method: 'post',
+    data
+  })
+}
